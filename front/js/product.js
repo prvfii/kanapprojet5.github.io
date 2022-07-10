@@ -64,44 +64,56 @@ addToCartBtn.onclick = () => {
       alert("Veuillez séléctionner une couleur et une quantité d'articles.");
    } else if (product.color == 0 || product.quantity == 0) {
       alert("Veuillez séléctionner une quantité d'articles/ou une couleur.");
-   } else if(product.quantity >= 1){
+   } else if (product.quantity >= 1) {
 
-      if(basket.length === 0){
-         basket.push(product);
-      localStorage.setItem("product", JSON.stringify(product));
-      
-   }else {
-      for(i = 0; i < basket.length; i++){
+      if (basket.length == 0) {
+            localStorage.basket = JSON.stringify(basket);
+            basket.push(product);
+            localStorage.setItem("product", JSON.stringify(basket));
+            console.log(basket);
+            localStorage.getItem(basket);
 
-         if(basket[i].id == product.id && basket[i].color == product.color){
-            console.log("test"),
-               basket[i].quantity++,
-               
-               localStorage.setItem("product", JSON.stringify(basket))
-               
-            
+           
+      } else { for (i = 0; i < basket.length; i++) {
 
+            if (basket[i].id === product.id) {
+               if(basket[i].color === product.color){
 
-         }
+                  
+                  console.log(basket)
+                  // localStorage.setItem("product" , JSON.stringify(product));
+                  // localStorage.getItem("basket");
+                  // basket.push(product);
+                  // basket.quantity = basket[i].quantity + product.quantity;
+                  
+                  
+               }else{
+                  basket.push(product);
+                  localStorage.setItem("product", JSON.stringify(product));
+               }
+            }
 
+         }console.log(basket);
       }
-   }
 
       if (product.quantity == 1) {
          //Changement bouton
          addToCartBtn.innerHTML = `Ajouté au panier`
          addToCartBtn.style.color = "green";
-      } else if (product.quantity > 1){
+         document.location.reload();
+      } else if (product.quantity > 1) {
          //Changement bouton
          addToCartBtn.innerHTML = `Ajoutés au panier`
          addToCartBtn.style.color = "green";
+         document.location.reload();
+
       }
 
    }
-   
-   
-   
 
-      
+
+
+
+
 
 }
