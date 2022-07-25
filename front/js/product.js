@@ -46,74 +46,49 @@ fetchID();
 
 let addToCartBtn = document.getElementById("addToCart");
 
+addToCartBtn.addEventListener("click", (event) => {
+
+   // Le produit qui sera envoyé vers le localStorage
 
 
-addToCartBtn.onclick = () => {
-
-   //Créer un array pour le localStorage, et un produit 
-   let basket = [];
 
    let product = {
       id,
-      quantity: parseInt(document.getElementById("quantity").value),
-      color: document.getElementById("colors").value
+      color: document.getElementById("colors").value,
+      quantity: parseInt(document.getElementById("quantity").value)
    };
+   // LOCALSTORAGE
+   // stocker les valeurs du formulaire dans le local storage
 
 
-   if (product.color == 0 && product.quantity == 0) {
-      alert("Veuillez séléctionner une couleur et une quantité d'articles.");
-   } else if (product.color == 0 || product.quantity == 0) {
-      alert("Veuillez séléctionner une quantité d'articles/ou une couleur.");
-   } else if (product.quantity >= 1) {
+   let productInLocalstorage = JSON.parse(localStorage.getItem("produit"));
 
-      if (basket.length == 0) {
-            localStorage.basket = JSON.stringify(basket);
-            basket.push(product);
-            localStorage.setItem("product", JSON.stringify(basket));
-            console.log(basket);
-            localStorage.getItem(basket);
-
-           
-      } else { for (i = 0; i < basket.length; i++) {
-
-            if (basket[i].id === product.id) {
-               if(basket[i].color === product.color){
-
-                  
-                  console.log(basket)
-                  // localStorage.setItem("product" , JSON.stringify(product));
-                  // localStorage.getItem("basket");
-                  // basket.push(product);
-                  // basket.quantity = basket[i].quantity + product.quantity;
-                  
-                  
-               }else{
-                  basket.push(product);
-                  localStorage.setItem("product", JSON.stringify(product));
-               }
-            }
-
-         }console.log(basket);
-      }
-
-      if (product.quantity == 1) {
-         //Changement bouton
-         addToCartBtn.innerHTML = `Ajouté au panier`
-         addToCartBtn.style.color = "green";
-         document.location.reload();
-      } else if (product.quantity > 1) {
-         //Changement bouton
-         addToCartBtn.innerHTML = `Ajoutés au panier`
-         addToCartBtn.style.color = "green";
-         document.location.reload();
-
+   const confirmation = () => {
+      if (window.confirm("Produit(s) ajouté(s), appuyer sur OK pour consulter votre panier.")) {
+         window.location.href = "./cart.html";
       }
 
    }
 
+   // Il y a déja des produits enregistrés
+   if (productInLocalstorage) {
+      for (i = 0; i < productInLocalstorage.length; i++) {
+         if (product.id == productInLocalstorage[i].id && product.color == productInLocalstorage[i].color) {
+               productInLocalstorage[i].quantity += product.quantity;    
+         }
+      }
+         productInLocalstorage.push(product);
+         localStorage.setItem("produit", JSON.stringify(productInLocalstorage));
+         console.log(productInLocalstorage);
+         confirmation();
+   }
+   // Il n'y a pas de produits dans le localstorage
+   else {
+      productInLocalstorage = [];
+      productInLocalstorage.push(product);
+      localStorage.setItem("produit", JSON.stringify(productInLocalstorage));
+      console.log(productInLocalstorage)
+      confirmation();
 
-
-
-
-
-}
+   }
+});
