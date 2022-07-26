@@ -23,7 +23,6 @@ function cartAppear() {
                 })
 
                 .then((data) => {
-                    let price = data.price;
                     let cart__items = document.querySelector("#cart__items");
                     cart__items.innerHTML += `<article class="cart__item" data-id="${addCart[i].id}" data-color="${addCart[i].colors}">
                                                                     <div class="cart__item__img">
@@ -71,21 +70,22 @@ function getPriceItem() {
 
 /* --- Définition du nombre d'articles et du coût total du panier --- */
 function totalCart(price) {
-    let CartRegistered = JSON.parse(localStorage.getItem("produit"));
+    let addCart = JSON.parse(localStorage.getItem("produit"));
     let priceItem = price;
     console.log("prix", priceItem);
     let totalCartQty = 0;
     let totalCartPrice = 0;
 
     //la boucle récupère les quantités et les prix de tous les articles enregistrés dans le localstorage
-    for (let i = 0; i < CartRegistered.length; i++) {
+    for (let i = 0; i < addCart.length; i++) {
         //Nouvelle clé/valeur du localStorage -- Comptabilise la quantité totale/ articles et leur quantité ajoutés 
-        totalCartQty += CartRegistered[i].quantity;
+        totalCartQty += addCart[i].quantity;
         console.log("TCQ", totalCartQty);
+        //Enregistrement dans le localstorage
         localStorage.setItem("totalQuantity", JSON.stringify(totalCartQty));
 
         //Nouvelle clé/valeur du localStorage -- Comptabilise le coût total/ articles et selon leur quantité ajoutés 
-        totalCartPrice += (CartRegistered[i].quantity * priceItem);
+        totalCartPrice += (addCart[i].quantity * priceItem);
         console.log("TCP", totalCartPrice);
         localStorage.setItem("totalPrice", JSON.stringify(totalCartPrice));
     }
@@ -101,64 +101,26 @@ function totalCartAppear() {
     totalQtyCart.innerHTML = `<p>Total (<span id="totalQuantity">${totalCart}</span> articles) : <span id="totalPrice">${totalCost}</span> €</p>`;
 }
 
-function addQuantityButton() {
-    //récupération des produits enregistrés dans le localstorage
-    let cartRegistered = JSON.parse(localStorage.getItem("productsInCart"));
-    console.log("qté", cartRegistered);
-    // récupération des inputs et création d'une boucle afin d'itérer la création d'un event pour chacun d'eux 
-    const qtyButton = document.querySelectorAll('.itemQuantity');
-    qtyButton.forEach((quantity) => {
-        quantity.addEventListener("change", (e) => {
-            addQuantityButton();
+
+//Modifier la quantité ou supprimer des produits 
+deletItems();
+function deletItems(){
+
+    const supprimer = document.querySelectorAll(".deleteItem");
+    supprimer.forEach((btn, i ) => 
+        btn.addEventListener("click", (e) => {
+            deleteItemSelec(i);
+            alert("Article supprimé");
+            console.log("CC")
+            
         })
-    })
-}
-
-function addQuantityOption() {
-    for (item of cartRegistered) {
-        console.log("test0", item);
-        //si l'id et la couleur du produit est égale à celle du dataset de notre input
-        if (item._id == quantity.dataset.id && item.color == quantity.dataset.color) {
-            // console.log("test", item.quantity); 
-            item.quantity = parseInt(e.target.value);
-            localStorage.setItem("productsInCart", JSON.stringify(cartRegistered));
-            //déclaration de totalCart afin de recompter le résultat après modification 
-            totalCart();
-        }
+    );
+    function deleteItemSelec(i){
+        addCart.splice(i, 1);
+        localStorage.setItem("addCart", JSON.stringify("produit"));
     }
+
 }
-
-
-
-//SUPPRIMER DES ARTICLES
-
-//...
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // GESTION DU FORMULAIRE
 // Donner des variables aux input
 
