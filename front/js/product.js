@@ -49,7 +49,7 @@ let addToCartBtn = document.getElementById("addToCart");
 addToCartBtn.addEventListener("click", (event) => {
 
    // Le produit qui sera envoyé vers le localStorage
-
+event.preventDefault()
 
 
    let product = {
@@ -70,25 +70,47 @@ addToCartBtn.addEventListener("click", (event) => {
 
    }
 
+if(product.color == "" || product.quantity == 0){
+      alert("Choissisez une couleur et/ou une couleur")
+   } else { 
+
    // Il y a déja des produits enregistrés
    if (productInLocalstorage) {
       for (i = 0; i < productInLocalstorage.length; i++) {
-         if (product.id == productInLocalstorage[i].id && product.color == productInLocalstorage[i].color) {
-               productInLocalstorage[i].quantity += product.quantity;    
-         }
+         if (product.id == productInLocalstorage[i].id) {
+            if(product.color == productInLocalstorage[i].color){
+               productInLocalstorage[i].quantity += product.quantity;  
+               localStorage.setItem("produit", JSON.stringify(productInLocalstorage));
+               console.log("cc");    
+               console.log(productInLocalstorage[i].quantity)
+               confirmation();
+            }else {
+               productInLocalstorage.push(product);
+               localStorage.setItem("produit", JSON.stringify(productInLocalstorage));
+               console.log(productInLocalstorage);
+               console.log("salut");
+               confirmation();
+               return
+            }
+          
+            
+
+     
       }
-         productInLocalstorage.push(product);
-         localStorage.setItem("produit", JSON.stringify(productInLocalstorage));
-         console.log(productInLocalstorage);
-         confirmation();
-   }
-   // Il n'y a pas de produits dans le localstorage
-   else {
+   
+}} // Il n'y a pas de produits dans le localstorage
+   else if(!productInLocalstorage){
       productInLocalstorage = [];
       productInLocalstorage.push(product);
       localStorage.setItem("produit", JSON.stringify(productInLocalstorage));
       console.log(productInLocalstorage)
+      console.log("tqui");
       confirmation();
+      
 
-   }
+
+   
+
+   }}
+
 });

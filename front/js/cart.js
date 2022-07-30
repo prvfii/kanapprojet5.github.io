@@ -43,7 +43,24 @@ function cartAppear() {
                                                                             <p class="deleteItem" data-id="${addCart[i]._id}" data-color="${addCart[i].color}">Supprimer</p>
                                                                         </div>
                                                                     </div>
-                                                                </article>`;
+                                                            </article>`;
+                                                                    
+  
+//Problème survenu à régler
+ let price = data.price;
+
+
+    //Le prix total des produits
+  totalPrice = 0;
+  totalPrice += addCart[i].quantity * price;
+  console.log("totalPrice =" + addCart[i].quantity + "x" + price ) 
+  document.getElementById("totalPrice").innerText = totalPrice;
+    
+
+
+                                                                    
+                                                                    totalQuantity();
+
                 })
         }
 
@@ -53,75 +70,33 @@ function cartAppear() {
 }
 
 cartAppear();
-getPriceItem();
-function getPriceItem() {
-    fetch(`http://localhost:3000/api/products`)
-        .then((res) => {
-            return res.json();
-        })
 
-        .then((data) => {
-            for (i = 0; i < data.length; i++) {
-                let price = data[i].price;
-                totalCart(price);
-            }
-        })
-}
 
-/* --- Définition du nombre d'articles et du coût total du panier --- */
-function totalCart(price) {
-    let addCart = JSON.parse(localStorage.getItem("produit"));
-    let priceItem = price;
-    console.log("prix", priceItem);
-    let totalCartQty = 0;
-    let totalCartPrice = 0;
 
-    //la boucle récupère les quantités et les prix de tous les articles enregistrés dans le localstorage
-    for (let i = 0; i < addCart.length; i++) {
-        //Nouvelle clé/valeur du localStorage -- Comptabilise la quantité totale/ articles et leur quantité ajoutés 
-        totalCartQty += addCart[i].quantity;
-        console.log("TCQ", totalCartQty);
-        //Enregistrement dans le localstorage
-        localStorage.setItem("totalQuantity", JSON.stringify(totalCartQty));
+function totalQuantity() {
+    totalCartQuantity = 0;
+    
+    for (var i in addCart) {
 
-        //Nouvelle clé/valeur du localStorage -- Comptabilise le coût total/ articles et selon leur quantité ajoutés 
-        totalCartPrice += (addCart[i].quantity * priceItem);
-        console.log("TCP", totalCartPrice);
-        localStorage.setItem("totalPrice", JSON.stringify(totalCartPrice));
+        
+        // La quantité totale des produits
+        totalCartQuantity += addCart[i].quantity;
+        console.log("TOTAL ARTICLES", totalCartQuantity)
+        localStorage.setItem("TOTAL ARTICLES", JSON.stringify(totalCartQuantity));
+        document.getElementById("totalQuantity").innerText = totalCartQuantity;
+
+      
     }
-    //Déclaration de la fonction TotalCartAppear
-    totalCartAppear();
-}
-function totalCartAppear() {
-    //récupération des valeurs enregistrées dans le localStorage que l'on intègre dans deux nouvelles variables 
-    let totalCart = JSON.parse(localStorage.getItem("totalQuantity"));
-    let totalCost = JSON.parse(localStorage.getItem("totalPrice"));
-    //récupération de la class et intégration des valeurs dans les éléments HTML 
-    let totalQtyCart = document.querySelector(".cart__price")
-    totalQtyCart.innerHTML = `<p>Total (<span id="totalQuantity">${totalCart}</span> articles) : <span id="totalPrice">${totalCost}</span> €</p>`;
 }
 
 
-//Modifier la quantité ou supprimer des produits 
-deletItems();
-function deletItems(){
 
-    const supprimer = document.querySelectorAll(".deleteItem");
-    supprimer.forEach((btn, i ) => 
-        btn.addEventListener("click", (e) => {
-            deleteItemSelec(i);
-            alert("Article supprimé");
-            console.log("CC")
-            
-        })
-    );
-    function deleteItemSelec(i){
-        addCart.splice(i, 1);
-        localStorage.setItem("addCart", JSON.stringify("produit"));
-    }
 
-}
-// GESTION DU FORMULAIRE
+
+
+
+
+// ___________________________________________GESTION DU FORMULAIRE__________________________________________
 // Donner des variables aux input
 
 function validateForm() {
