@@ -4,6 +4,8 @@ const url = "http://localhost:3000/api/products";
 let data = "";
 
 
+
+
 // Get l'ID du canapé sélectionner 
 
 let id = urlProduct.searchParams.get("id");
@@ -44,13 +46,16 @@ fetchID();
 
 
 
-let addToCartBtn = document.getElementById("addToCart");
 
+addToPanier()
+function addToPanier(){
+
+let addToCartBtn = document.getElementById("addToCart");
 addToCartBtn.addEventListener("click", (event) => {
 
+   
+   event.preventDefault()
    // Le produit qui sera envoyé vers le localStorage
-event.preventDefault()
-
 
    let product = {
       id,
@@ -70,47 +75,66 @@ event.preventDefault()
 
    }
 
-if(product.color == "" || product.quantity == 0){
-      alert("Choissisez une couleur et/ou une couleur")
-   } else { 
 
-   // Il y a déja des produits enregistrés
-   if (productInLocalstorage) {
-      for (i = 0; i < productInLocalstorage.length; i++) {
-         if (product.id == productInLocalstorage[i].id) {
-            if(product.color == productInLocalstorage[i].color){
-               productInLocalstorage[i].quantity += product.quantity;  
-               localStorage.setItem("produit", JSON.stringify(productInLocalstorage));
-               console.log("cc");    
-               console.log(productInLocalstorage[i].quantity)
-               confirmation();
-            }else {
+   if(product.color === "" || product.quantity === 0){
+      alert("Choissisez une couleur et/ou un nombre");
+      document.location.reload();
+      addToPanier();
+   } else{ 
+      // Il n'y a pas de produits dans le localstorage
+      if(!productInLocalstorage){
+         productInLocalstorage = [];
+         productInLocalstorage.push(product);
+         localStorage.setItem("produit", JSON.stringify(productInLocalstorage));
+         console.log(productInLocalstorage)
+         console.log("tqui");
+         confirmation();
+      }
+      //Il y a des produits dans le localstorage
+      else if(productInLocalstorage.length != 0){
+         var okay = 0;
+         for (i = 0; i < productInLocalstorage.length; i++) {
+            if ((product.id === productInLocalstorage[i].id) && (product.color === productInLocalstorage[i].color)) {
+               
+                  okay++;
+                  productInLocalstorage[i].quantity += product.quantity;  
+                  localStorage.setItem("produit", JSON.stringify(productInLocalstorage));
+                  console.log("cc");    
+                  console.log(productInLocalstorage[i].quantity)
+                  confirmation();
+                  
+                  }
+
+               }if(okay === 0){
+               /* //  else if(product.color != productInLocalstorage[i].color) {
+
+                  productInLocalstorage.push(product);
+                  localStorage.setItem("produit", JSON.stringify(productInLocalstorage));
+                  console.log(productInLocalstorage);
+                  console.log("salut");
+                  confirmation(); 
+                  
+                 
+               } */
+
+            // else{
                productInLocalstorage.push(product);
                localStorage.setItem("produit", JSON.stringify(productInLocalstorage));
                console.log(productInLocalstorage);
-               console.log("salut");
+               console.log("bonsoir");
                confirmation();
-               return
             }
-          
-            
-
-     
+            // }}
+         
+         }
       }
-   
-}} // Il n'y a pas de produits dans le localstorage
-   else if(!productInLocalstorage){
-      productInLocalstorage = [];
-      productInLocalstorage.push(product);
-      localStorage.setItem("produit", JSON.stringify(productInLocalstorage));
-      console.log(productInLocalstorage)
-      console.log("tqui");
-      confirmation();
+
       
-
-
+      
    
+  
 
-   }}
+
 
 });
+}
