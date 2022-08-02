@@ -8,7 +8,7 @@ const url = new URL(urlPage)
 
 // Récuperer l'id
 
-const urlId = url.searchParams.get("orderId");
+const urlId = url.searchParams.get("id");
 
 
 document.getElementById("orderId").innerHTML = urlId;
