@@ -9,10 +9,6 @@ const urlProduct = new URL(kanap);
 const url = "http://localhost:3000/api/products";
 
 
-
-
-
-
 // Get l'ID du canapé sélectionner 
 let id = urlProduct.searchParams.get("id");
 let URLID = url + "/" + id;

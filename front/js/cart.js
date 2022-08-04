@@ -9,7 +9,8 @@ function cartAppear() {
 
 
     // Si le panier est vide 
-    if (addCart === null) {
+    if (addCart === null || addCart == "") {
+        localStorage.clear()
         document.querySelector(".cart").innerHTML = "<h1>OOPS ! Votre panier est vide</h1>";
     } else {
         console.log("Votre pannier n'est pas vide");
@@ -52,22 +53,17 @@ function createCart(id, color, chemin, altImg, nom, prix, quantity, item) {
     article.className = "cart__item";
     article.setAttribute("data-id", id);
     article.setAttribute("data-color", color);
-
     let cart__item__img = document.createElement("div");
     cart__item__img.className = "cart__item__img";
-
     let img = document.createElement("img");
     img.setAttribute("src", chemin);
     img.setAttribute("alt", altImg);
     cart__item__img.appendChild(img);
     article.appendChild(cart__item__img);
-
     let cart__item__content = document.createElement("div");
     cart__item__content.className = "cart__item__content";
-
     let cart__item__content__description = document.createElement("div");
     cart__item__content__description.className = "cart__item__content__description";
-
     let name = document.createElement("h2");
     name.innerText = nom;
     let couleur = document.createElement("p");
@@ -78,16 +74,12 @@ function createCart(id, color, chemin, altImg, nom, prix, quantity, item) {
     cart__item__content__description.appendChild(couleur);
     cart__item__content__description.appendChild(price);
     cart__item__content.appendChild(cart__item__content__description);
-
     let cart__item__content__settings = document.createElement("div");
     cart__item__content__settings.className = "cart__item__content__settings";
-
     let cart__item__content__settings__quantity = document.createElement("div");
     cart__item__content__settings__quantity.className = "cart__item__content__settings__quantity";
-
     let paragraph = document.createElement("p");
     paragraph.innerText = "Qté :  " + quantity;
-
     let itemQuantity = document.createElement("input");
     itemQuantity.setAttribute("type", "number");
     itemQuantity.className = "itemQuantity";
@@ -96,40 +88,27 @@ function createCart(id, color, chemin, altImg, nom, prix, quantity, item) {
     itemQuantity.setAttribute("max", "100");
     itemQuantity.setAttribute("value", quantity);
     itemQuantity.addEventListener("change", () => {
-
-        // Modification d'une quantité de produit
-
-        quantity = itemQuantity.value;
+    // Modification d'une quantité de produit
+         quantity = itemQuantity.value;
         item.quantity = quantity;
         console.log(item.quantity)
         let index = addCart.indexOf(item);
-        totalPrice = 0;
         if (index > -1) {
             addCart.splice(index, 1);
             addCart.push(item);
             window.localStorage.setItem("produit", JSON.stringify(addCart));
             totalPrices(item, prix)
-            
-            paragraph.innerText = "Qté :  " + quantity;
+            totalQuantity();
+            location.reload();
         }
-       
-        
-       
-        
-
-
+        paragraph.innerText = "Qté :  " + quantity;
     })
 
     cart__item__content__settings__quantity.appendChild(paragraph);
     cart__item__content__settings__quantity.appendChild(itemQuantity);
-
     cart__item__content__settings.appendChild(cart__item__content__settings__quantity);
-
-
-
     let cart__item__content__settings__delete = document.createElement("div");
     cart__item__content__settings__delete.className = "cart__item__content__settings__delete";
-
     let supp = document.createElement("p");
     supp.className = "deleteItem";
     supp.innerText = "Supprimer";
@@ -137,7 +116,7 @@ function createCart(id, color, chemin, altImg, nom, prix, quantity, item) {
     supp.addEventListener("click", () => {
         console.log(id);
         let index = addCart.indexOf(item);
-        if (index >-1) {
+        if (index > -1) {
             addCart.splice(index, 1);
             window.localStorage.setItem("produit", JSON.stringify(addCart));
             cart__items.removeChild(article);
@@ -145,21 +124,14 @@ function createCart(id, color, chemin, altImg, nom, prix, quantity, item) {
             totalQuantity()
             location.reload()
         }
+
     });
 
     cart__item__content__settings__delete.appendChild(supp);
     cart__item__content__settings.appendChild(cart__item__content__settings__delete);
-
     cart__item__content.appendChild(cart__item__content__settings);
-
     article.appendChild(cart__item__content)
-
     cart__items.appendChild(article);
-
-
-
-
-
 }
 
 
@@ -184,7 +156,7 @@ totalPrice = 0;
 function totalPrices(item, price) {
 
     //Le prix total des produits
-    
+
 
     totalPrice += item.quantity * price;
     console.log(totalPrice)
@@ -196,6 +168,8 @@ function totalPrices(item, price) {
 
 
 }
+
+
 
 
 
@@ -243,6 +217,8 @@ function validateForm() {
         validate = false;
 
         document.querySelector('#firstNameErrorMsg').innerHTML = 'Prénom non valide';
+        return validate;
+
     }
 
 
@@ -258,6 +234,8 @@ function validateForm() {
         validate = false;
 
         document.querySelector('#lastNameErrorMsg').innerHTML = 'Nom non valide';
+        return validate;
+
     }
 
 
@@ -272,6 +250,8 @@ function validateForm() {
         validate = false;
 
         document.querySelector('#addressErrorMsg').innerHTML = 'Ville non valide.';
+        return validate;
+
     }
 
 
@@ -288,6 +268,7 @@ function validateForm() {
         validate = false;
 
         document.querySelector('#cityErrorMsg').innerHTML = 'Ville non valide';
+        return validate;
     }
 
     // Vérification de l'email 
@@ -302,6 +283,8 @@ function validateForm() {
         validate = false;
 
         document.querySelector('#emailErrorMsg').innerHTML = `un email valide est : unnom@monfournisseur.com`;
+        return validate;
+
     }
 
     return validate;
